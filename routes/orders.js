@@ -12,7 +12,7 @@ var con = mysql.createConnection({
 router.get("/", function(req, res, next){
     con.connect(function(err) {
         if (err) throw err;
-        con.query("SELECT * FROM user", function (err, result, fields) {
+        con.query("SELECT * FROM orders", function (err, result, fields) {
           if (err) throw err;
           res.json(result);
         });
