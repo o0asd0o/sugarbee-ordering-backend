@@ -12,6 +12,7 @@ loginRouter = require("./routes/login");
 ordersRouter = require("./routes/orders");
 orderRouter = require("./routes/order");
 updateRouter = require("./routes/update");
+deleteRouter = require("./routes/delete");
 var app = express();
 
 // view engine setup
@@ -35,6 +36,7 @@ app.use("/login", loginRouter);
 app.use("/orders", ordersRouter);
 app.use("/order", orderRouter);
 app.use("/update", updateRouter);
+app.use("/delete", deleteRouter);
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
