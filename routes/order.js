@@ -4,8 +4,8 @@ const cors = require("cors")
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
 
-const ordersm = require("../models/ordersm")
-const ordersd = require("../models/ordersd")
+const ordersModel = require("../models/orders")
+const orderDetailModel = require("../models/order_detail")
 orders.use(cors())
 
 process.env.SECRET_KEY = 'sugarbee'
@@ -39,8 +39,8 @@ orders.post('/create', (req, res) => {
         total_price: req.body.total_price,
     }
 
-    ordersm.create(orderData)
-    ordersd.create(orderdData)
+    ordersModel.create(orderData)
+    ordersDetailModel.create(orderdData)
     .then(order => {
         res.json({status: order.email + ' registered'})
     })

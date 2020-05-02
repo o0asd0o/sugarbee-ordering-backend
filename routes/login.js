@@ -17,7 +17,6 @@ router.post("/", function(req, res, next) {
         WHERE username='${username}'
         AND password='${password}'
     `;
-    console.log(queryString);
     try {
         con.query(queryString, function (err, result, fields) {
             if (err) throw err;
