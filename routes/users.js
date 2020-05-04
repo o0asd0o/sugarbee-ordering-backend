@@ -36,7 +36,7 @@ users.post('/register', (req, res) => {
                     res.send('error: ' + err)
                 })
             })
-        } 
+        }
         else {
             res.json({error: "User already exists"})
         }
@@ -59,11 +59,11 @@ users.post('/login', (req, res) => {
                     expiresIn: 1440
                 })
                 res.send(token)
-            } 
+            }
             else {
                 res.status(400).json({error: err})
             }
-        } 
+        }
         else {
             res.status(400).json({error: 'User does not exist'})
         }

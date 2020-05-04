@@ -2,7 +2,7 @@ const Sequelize = require("sequelize")
 const db = require("../database/db")
 
 module.exports = db.sequelize.define(
-    'order_detail',
+    'order_details',
     {
         identifier: {
             type: Sequelize.INTEGER,
@@ -19,7 +19,7 @@ module.exports = db.sequelize.define(
             type: Sequelize.FLOAT
         },
         quantity: {
-            type: Sequelize.FLOAT
+            type: Sequelize.INTEGER
         },
         total_price: {
             type: Sequelize.FLOAT
