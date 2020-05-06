@@ -12,7 +12,7 @@ var con = mysql.createPool({
 
 router.get("/", function (req, res) {
     try {
-        con.query("SELECT * FROM `orders` WHERE `created_date`=date(?)", [req.query.createdDate], function (error, results, fields) {
+        con.query("SELECT * FROM `orders` WHERE `deadline`=?", [req.body.deadline], function (error, results, fields) {
            if (error) throw error;
            res.status(200).send(JSON.stringify(Helpers.fromUnderScoreToCamelCase(results)));
         });

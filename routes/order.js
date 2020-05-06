@@ -12,7 +12,15 @@ process.env.SECRET_KEY = 'sugarbee'
 
 orders.post('/create', (req, res) => {
     const today =  new Date().toJSON();
-    const orderData = {
+    const orderdData = {
+        order_id: req.body.order_id,
+        item_name: req.body.item_name,
+        unit_price: req.body.unit_price,
+        quantity: req.body.quantity,
+        total_price: req.body.total_price,
+    }
+
+    ordersModel.create({ 
         creator_id: req.body.creator_id,
         created: today,
         customer_name: req.body.customer_name,
@@ -29,23 +37,27 @@ orders.post('/create', (req, res) => {
         total_amount: req.body.total_amount,
         payment_status: req.body.payment_status,
         request: req.body.request,
-        special_offer: req.body.special_offer,
-    }
-    const orderdData = {
-        order_id: req.body.order_id,
-        item_name: req.body.item_name,
-        unit_price: req.body.unit_price,
-        quantity: req.body.quantity,
-        total_price: req.body.total_price,
-    }
-
-    ordersModel.create(orderData)
-    ordersDetailModel.create(orderdData)
-    .then(order => {
-        res.json({status: order.email + ' registered'})
+        special_offer: req.body.special_offer
+    }).then(ordersModel => {
+        orderDetailModel.create({
+            order_id: ordersModel.identifier,
+            item_name: req.body.item_name,
+            unit_price: req.body.unit_price,
+            quantity: req.body.quantity,
+            total_price: req.body.total_price,
+        }).then(orderDetailModel => {
+            console.log(ordersModel.get({
+              plain: true
+            }),
+                orderDetailModel.get({
+                plain: true
+              })
+            );
+            res.status(200).send("ORDER SUCCESSFULLY ADDED")
+        })
     })
     .catch(err => {
-        res.send('error: ' + err)
+        res.status(500).send("ERROR OCCURED WHILE SAVING ORDERS")
     })
 })
 
