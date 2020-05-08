@@ -32,22 +32,17 @@ orders.post('/create', (req, res) => {
         request: req.body.request,
         special_offer: req.body.special_offer
     }).then(ordersModel => {
-        orderDetailModel.create({
-            order_id: ordersModel.identifier,
-            item_name: req.body.item_name,
-            unit_price: req.body.unit_price,
-            quantity: req.body.quantity,
-            total_price: req.body.total_price,
-        }).then(orderDetailModel => {
-            console.log(ordersModel.get({
-              plain: true
-            }),
-                orderDetailModel.get({
-                plain: true
-              })
-            );
-            res.status(200).send("ORDER SUCCESSFULLY ADDED")
+        req.body.orders.map(orders => {
+            orderDetailModel.create({
+                order_id: ordersModel.identifier,
+                item_name: orders.item_name,
+                unit_price: orders.unit_price,
+                quantity: orders.quantity,
+                total_price: orders.total_price,
+            }).then(orderDetailModel => {
+            })
         })
+        res.status(200).send("ORDER SUCCESSFULLY ADDED")
     })
     .catch(err => {
         res.status(500).send("ERROR OCCURED WHILE SAVING ORDERS")
