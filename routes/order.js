@@ -12,13 +12,6 @@ process.env.SECRET_KEY = 'sugarbee'
 
 orders.post('/create', (req, res) => {
     const today =  new Date().toJSON();
-    const orderdData = {
-        order_id: req.body.order_id,
-        item_name: req.body.item_name,
-        unit_price: req.body.unit_price,
-        quantity: req.body.quantity,
-        total_price: req.body.total_price,
-    }
 
     ordersModel.create({ 
         creator_id: req.body.creator_id,
