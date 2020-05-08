@@ -1,8 +1,7 @@
 const express =  require("express")
 const orders = express.Router()
 const cors = require("cors")
-const jwt = require("jsonwebtoken")
-const bcrypt = require("bcrypt")
+var Helpers = require("../utils/helpers")
 
 const ordersModel = require("../models/orders")
 const orderDetailModel = require("../models/order_detail")
@@ -13,34 +12,33 @@ process.env.SECRET_KEY = 'sugarbee'
 orders.post('/create', (req, res) => {
     const today =  new Date().toJSON();
 
-    ordersModel.create({ 
-        creator_id: req.body.creator_id,
+    ordersModel.create(Helpers.fromCamelCaseToUnderScore({ 
+        creatorId: req.body.CreatorId,
         created: today,
-        customer_name: req.body.customer_name,
-        contact_number: req.body.contact_number,
+        customerName: req.body.customerName,
+        contactNumber: req.body.contactNumber,
         email: req.body.email,
         facebook: req.body.facebook,
         instagram: req.body.instagram,
         deadline: req.body.deadline,
-        pickup_location: req.body.pickup_location,
-        delivery_method: req.body.delivery_method,
-        delivery_address: req.body.delivery_address,
-        discount_type: req.body.discount_type,
-        discount_value: req.body.discount_value,
-        total_amount: req.body.total_amount,
-        payment_status: req.body.payment_status,
+        pickupLocation: req.body.pickupLocation,
+        deliveryMethod: req.body.deliveryMethod,
+        deliveryAddress: req.body.deliveryAddress,
+        discountType: req.body.discountType,
+        discountValue: req.body.discountValue,
+        totalAmount: req.body.totalAmount,
+        paymentStatus: req.body.paymentStatus,
         request: req.body.request,
-        special_offer: req.body.special_offer
-    }).then(ordersModel => {
+        specialOffer: req.body.specialOffer
+    })).then(ordersModel => {
         req.body.orders.map(orders => {
-            orderDetailModel.create({
-                order_id: ordersModel.identifier,
-                item_name: orders.item_name,
-                unit_price: orders.unit_price,
+            orderDetailModel.create(Helpers.fromCamelCaseToUnderScore({
+                orderId: ordersModel.identifier,
+                itemName: orders.itemName,
+                unitPrice: orders.unitPrice,
                 quantity: orders.quantity,
-                total_price: orders.total_price,
-            }).then(orderDetailModel => {
-            })
+                totalPrice: orders.totalPrice,
+            }))
         })
         res.status(200).send("ORDER SUCCESSFULLY ADDED")
     })
