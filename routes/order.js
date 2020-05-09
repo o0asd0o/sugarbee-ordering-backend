@@ -50,7 +50,7 @@ orders.post('/create', (req, res) => {
 
 orders.get('/find', (req, res) => {
     console.log('Getting orders');
-    ordersModel.findAll({ 
+    ordersModel.findAll({
         where: {
             deadline: req.body.deadline
         },
