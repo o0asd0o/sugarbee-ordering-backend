@@ -47,4 +47,22 @@ orders.post('/create', (req, res) => {
     })
 })
 
+
+orders.get('/find', (req, res) => {
+    console.log('Getting orders');
+    ordersModel.findAll({
+        where: {
+            deadline: req.body.deadline
+        },
+        raw: true
+    }).then(ordersModel => {
+        console.log(ordersModel)
+        res.status(200).send(JSON.stringify(Helpers.fromUnderScoreToCamelCase(ordersModel)));
+    }).catch(err => {
+        console.log(err)
+        res.status(500).send("ERROR OCCURRED WHILE RETRIEVING ORDERS on " + req.body.deadline);
+    });
+})
+
+
 module.exports = orders;
