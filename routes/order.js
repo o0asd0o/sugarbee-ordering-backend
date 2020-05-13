@@ -7,7 +7,7 @@ const Sequelize = require("sequelize")
 const ordersModel = require("../models/orders")
 const orderDetailModel = require("../models/order_detail")
 orderDetailModel.belongsTo(ordersModel)
-ordersModel.hasMany(orderDetailModel, { as: 'orderD' })
+ordersModel.hasMany(orderDetailModel, { as: 'orderItems', key: 'order_identifier' })
 orders.use(cors())
 
 process.env.SECRET_KEY = 'sugarbee'
@@ -55,44 +55,56 @@ orders.get('/find', (req, res) => {
     console.log('Getting orders');
     const createdDate = req.body.createdDate;
     ordersModel.findAll({
-        // attributes: [
-        //     'identifier',
-        //     'creator_id',
-        //     [Sequelize.fn('date_format', Sequelize.col('created_date'), '%Y-%m-%d %h:%i %p'), 'created_date'],
-        //     'customer_name',
-        //     'contact_number',
-        //     'email',
-        //     'facebook',
-        //     'instagram',
-        //     'deadline',
-        //     'pickup_location',
-        //     'delivery_method',
-        //     'delivery_address',
-        //     'discount_type',
-        //     'discount_value',
-        //     'total_amount',
-        //     'payment_status',
-        //     'request',
-        //     'special_offer',
-        //     'deleted'
-        // ],
+        attributes: [
+            'identifier',
+            'creator_id',
+            [Sequelize.fn('date_format', Sequelize.col('created_date'), '%Y-%m-%d %h:%i %p'), 'created_date'],
+            'customer_name',
+            'contact_number',
+            'email',
+            'facebook',
+            'instagram',
+            'deadline',
+            'pickup_location',
+            'delivery_method',
+            'delivery_address',
+            'discount_type',
+            'discount_value',
+            'total_amount',
+            'payment_status',
+            'request',
+            'special_offer',
+            'deleted'
+        ],
         where: Sequelize.where(Sequelize.cast(Sequelize.col('created_date'), 'DATE'), '=', createdDate),
         include: [{
-            attributes: [
-                'identifier',
-                'item_name'
-            ],
             model: orderDetailModel,
-            as: 'orderD'
+            as: 'orderItems'
         }],
-        raw: true
+        raw: false
     }).then(ordersModel => {
-        res.status(200).send(JSON.stringify(Helpers.fromUnderScoreToCamelCase(ordersModel), null, 2));
-        console.log(JSON.stringify(Helpers.fromUnderScoreToCamelCase(ordersModel), null, 2))
+        const dataValues = ordersModel.map(orders => {
+            const item = orders.dataValues
+            return item
+        })
+
+        const result = dataValues.map(items => {
+            Object.keys(items).map(function(key, index) {
+                if(Array.isArray(items[key])){
+                    var orderItems = items[key].map(value => {
+                        return value.dataValues
+                    })
+                    items[key] = orderItems
+                }
+            });
+            return items;
+        })
+        console.log(result);
+        res.status(200).send(Helpers.fromUnderScoreToCamelCase(result));
         console.log("Success")
     }).catch(err => {
         console.log(err)
-        res.status(500).send("ERROR OCCURRED WHILE RETRIEVING ORDERS on " + req.body.deadline);
+        res.status(500).send("ERROR OCCURRED WHILE RETRIEVING ORDERS on " + createdDate);
     });
 })
 
