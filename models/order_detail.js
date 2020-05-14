@@ -9,7 +9,7 @@ module.exports = db.sequelize.define(
             primaryKey: true,
             autoIncrement: true
         },
-        order_id: {
+        order_identifier: {
             type: Sequelize.INTEGER
         },
         item_name: {
@@ -26,6 +26,7 @@ module.exports = db.sequelize.define(
         },
     },
     {
-        timestamps: false
+        timestamps: false,
+        underscored: true
     }
 )
