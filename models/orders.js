@@ -12,9 +12,9 @@ module.exports = db.sequelize.define(
         creator_id: {
             type: Sequelize.INTEGER
         },
-        created: {
-            type: Sequelize.STRING,
-            defaultValue: Sequelize.NOW
+        created_date: {
+            type: Sequelize.DATEONLY,
+            defaultValue: Sequelize.NOW,
         },
         customer_name: {
             type: Sequelize.STRING
@@ -63,6 +63,7 @@ module.exports = db.sequelize.define(
         },
     },
     {
-        timestamps: false
+        timestamps: false,
+        underscored: true
     }
 )
