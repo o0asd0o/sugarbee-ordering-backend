@@ -12,9 +12,8 @@ process.env.SECRET_KEY = 'sugarbee'
 orders.post('/create', (req, res) => {
     const today =  new Date().toJSON();
 
-    ordersModel.create(Helpers.fromCamelCaseToUnderScore({ 
+    ordersModel.create(Helpers.fromCamelCaseToUnderScore({
         creatorId: req.body.CreatorId,
-        created: today,
         customerName: req.body.customerName,
         contactNumber: req.body.contactNumber,
         email: req.body.email,
