@@ -13,7 +13,7 @@ router.post("/", function(req, res, next) {
     const { username, password } = req.body;
     const queryString = `
         SELECT username, password
-        FROM user
+        FROM users
         WHERE username='${username}'
         AND password='${password}'
     `;
