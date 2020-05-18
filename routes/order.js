@@ -51,9 +51,9 @@ orders.post('/create', (req, res) => {
 })
 
 
-orders.get('/find', (req, res) => {
+orders.get('/find/:createdDate', (req, res) => {
     console.log('Getting orders');
-    const createdDate = req.body.createdDate;
+    const createdDate = req.params.createdDate;
     ordersModel.findAll({
         attributes: [
             'identifier',
@@ -76,7 +76,7 @@ orders.get('/find', (req, res) => {
             'special_offer',
             'deleted'
         ],
-        where: Sequelize.where(Sequelize.cast(Sequelize.col('created_date'), 'DATE'), '=', createdDate),
+        where: Sequelize.where(Sequelize.cast(Sequelize.col('created_date'), 'DATE'), createdDate),
         include: [{
             model: orderDetailModel,
             as: 'orderItems'
@@ -96,11 +96,12 @@ orders.get('/find', (req, res) => {
                     })
                     items[key] = orderItems
                 }
-            });
-            return items;
+                return items[key]
+            })
+            return items
         })
         console.log(result);
-        res.status(200).send(Helpers.fromUnderScoreToCamelCase(result));
+        res.status(200).send(JSON.stringify(Helpers.fromUnderScoreToCamelCase(result)));
         console.log("Success")
     }).catch(err => {
         console.log(err)
